@@ -1,0 +1,55 @@
+{
+  "detectIntentResponseId": "28312657-87e3-450f-b722-ce655b7655a1",
+  "intentInfo": {
+    "lastMatchedIntent": "projects/chatbots-dev-324111/locations/europe-west1/agents/c333679c-6b47-4fbb-9e34-2438ba582e55/intents/d34b6a36-2143-409b-9252-45ab82b63d69",
+    "parameters": {
+      "location": {
+        "originalValue": "London",
+        "resolvedValue": [
+          "London"
+        ]
+      }
+    },
+    "displayName": "Answer Location Intent",
+    "confidence": 1.0
+  },
+  "pageInfo": {
+    "currentPage": "projects/chatbots-dev-324111/locations/europe-west1/agents/c333679c-6b47-4fbb-9e34-2438ba582e55/flows/00000000-0000-0000-0000-000000000000/pages/f3b9b100-3e10-4bb6-9fa9-d1cf8ea4a2cd",
+    "formInfo": {
+      "parameterInfo": [
+        {
+          "displayName": "Time",
+          "state": "EMPTY"
+        }
+      ]
+    },
+    "displayName": "Location"
+  },
+  "sessionInfo": {
+    "session": "projects/chatbots-dev-324111/locations/europe-west1/agents/c333679c-6b47-4fbb-9e34-2438ba582e55/sessions/4fbda5-0a3-34f-8c4-a59dd8089",
+    "parameters": {
+      "location": [
+        "London"
+      ]
+    }
+  },
+  "fulfillmentInfo": {
+    "tag": "location"
+  },
+  "messages": [
+    {
+      "text": {
+        "text": [
+          "Got it, you are in London"
+        ],
+        "redactedText": [
+          "Got it, you are in $location_redacted"
+        ]
+      },
+      "responseType": "HANDLER_PROMPT",
+      "source": "VIRTUAL_AGENT"
+    }
+  ],
+  "text": "London",
+  "languageCode": "en"
+}

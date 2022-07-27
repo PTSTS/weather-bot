@@ -1,0 +1,7 @@
+A file named "config.json" should be created in this directory.
+The file must contain:
+{
+    "key": "",  // your API key
+}
+
+This API key is used for www.weatherapi.com
