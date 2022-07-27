@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request, make_response, jsonify, Response
-import server.weather
 from server.response import fulfillment_response
+from server.weather import weather
 import datetime
 
 
@@ -21,13 +21,24 @@ def index():
     pass
 
 
-@app.route('/webhook', methods=['GET', 'POST'])
-def hook():
+@app.route('/weather', methods=['GET', 'POST'])
+def check_weather():
     request_body = json.loads(request.data)
+    date_dict = request_body['sessionInfo']['parameters']['date']
+    session_name = request_body['sessionInfo']['session']
+    date = datetime.date(int(date_dict['year']), int(date_dict['month']), int(date_dict['day']))
+    location_list = request_body['sessionInfo']['parameters']['location']
+    location = ', '.join(location_list)
     print(request_body)
-    return make_response(jsonify({
-        'fulfillmentText': 'This is a response from webhook.'
-    } ))
+    day_weather = weather(location, date, api_key)
+    if day_weather.location_found:
+        response = fulfillment_response(
+            f"""You aksed for the weather on {date.day}/{date.month}/{date.year} in the location 
+{day_weather.location}. The lowest temperature is {day_weather.low_temp} C, the highest temperature is 
+{day_weather.high_temp}. Is this the right location you are looking for?""",
+            parameters={'location_validated': True}, session=session_name
+        )
+        
 
 
 @app.route('/date', methods=['GET', 'POST'])
@@ -40,14 +51,14 @@ def check_date():
     date = datetime.date(int(date_dict['year']), int(date_dict['month']), int(date_dict['day']))
     current_date = datetime.date.today()
 
-    if date - current_date > datetime.timedelta(days=13):
+    if date - current_date > datetime.timedelta(days=10):
         response = fulfillment_response(
             """Sorry, we can only provide forecast for the next 14 days.""",
             parameters={'date_validated': False, 'date': None}, session=session_name
         )
-    elif date < datetime.date(2010, 1, 1):
+    elif date < datetime.date.today():
         response = fulfillment_response(
-            """Sorry, we don't have record before Jan 1 2010.""",
+            """Sorry, we don't have record for historical weather.""",
             parameters={'date_validated': False, 'date': None}, session=session_name
         )
     else:
