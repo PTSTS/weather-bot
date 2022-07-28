@@ -1,6 +1,5 @@
 import json
 from flask import Flask, request, make_response, jsonify, Response
-from server.response import fulfillment_response
 from server.weather import weather
 from server.availability import *
 import datetime
@@ -8,6 +7,9 @@ import datetime
 
 app = Flask(__name__)
 config_file = '../config/config.json'
+""" Config file should be json and contains "key", an API key to www.weatherapi.com, also optionally "port", 
+the port number."""
+
 with open(config_file, 'r') as config_file_pointer:
     config_data = json.load(config_file_pointer)
     if 'port' in config_data.keys():
@@ -15,11 +17,6 @@ with open(config_file, 'r') as config_file_pointer:
     else:
         port = 80
     api_key = config_data['key']
-
-
-@app.route('/')
-def index():
-    pass
 
 
 @app.route('/weather', methods=['GET', 'POST'])

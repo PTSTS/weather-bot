@@ -1,9 +1,18 @@
-
 import datetime
 from server.response import fulfillment_response
 
 
 def check_availability(date, day_weather, session_name, location):
+    """
+    Check if the weather on the given date and location is available, if so make a response with weather info,
+    if not, set the corresponding parameters and give an error message.
+    :param date datetime: the date of the weather
+    :param day_weather: a weather object containing the weather info from weather API
+    :param session_name: session name from the webhook, must be correct for the response
+    :param location str: location string for the weather
+    :return dict: a dict with parameters and messages
+    """
+
     if day_weather.location_found and day_weather.date_available:
         response = fulfillment_response(
             f"""You asked for the weather on {date.day}/{date.month}/{date.year} in the location:
@@ -30,7 +39,12 @@ def check_availability(date, day_weather, session_name, location):
 
 
 def check_date(date, session_name):
-    print('Checking date')
+    """
+    Check if the date provided is valid for weather lookup
+    :param date datetime: the date of the weather
+    :param session_name: session name from the webhook, must be correct for the response
+    :return: a dict with parameters and messages
+    """
     current_date = datetime.date.today()
     if date - current_date > datetime.timedelta(days=10):
         response = fulfillment_response(

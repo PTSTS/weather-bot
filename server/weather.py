@@ -3,9 +3,7 @@ import datetime
 import requests
 
 
-# api_key = json.load(open('../config/config.json', 'r'))['key']  # this config file is not on the Github repo
 url = 'https://api.weatherapi.com/v1/'
-
 
 class Weather:
     def __init__(self):
@@ -19,7 +17,13 @@ class Weather:
 
 
 def weather(location: str, date, api_key):
-    current_date = datetime.date.today()
+    """
+    Communicate with weather API
+    :param location str: location string, can be as long as the GET URL allows
+    :param date datetime: date for the weather
+    :param api_key str: weather API key
+    :return: a Weather object
+    """
     location = location.replace('&', '')
 
     data = {
@@ -33,7 +37,6 @@ def weather(location: str, date, api_key):
     request_url = url + 'forecast.json?' + '&'.join(f"{key}={value}" for key, value in data.items())
     response = requests.get(request_url)
     response_body = json.loads(response.text)
-    print(request_url)
 
     weather_data = Weather()
 
@@ -47,10 +50,6 @@ def weather(location: str, date, api_key):
                 weather_data.error_message = 'Weather API error.'
         else:
                 weather_data.error_message = 'Weather API error.'
-    # elif len(response_body["forecast"]['forecastday']) < data['days']:
-    #     print(response_body)
-    #     weather_data.location_found = True
-    #     weather_data.date_available = False
     else:
         try:
             high_temp, low_temp = extract_temp(response_body, date)
@@ -72,7 +71,12 @@ def weather(location: str, date, api_key):
 
 
 def extract_temp(data, date):
-    date_id = f'{date.year}-{date.month}-{date.day}'
+    """
+    Extract high and low temperature from the response data
+    :param dict data: Response data for a single day, must be under "forecastday"
+    :param datetime date: date to extract
+    :return: if successful, (high, low) temp (always celsius)
+    """
     forecast_date = data['forecast']['forecastday']
     for day in forecast_date:
         if day['date'] == str(date):
@@ -80,8 +84,3 @@ def extract_temp(data, date):
             low_temp = day['day']['mintemp_c']
             return high_temp, low_temp
     return False
-
-
-"""https://api.weatherapi.com/v1/forecast.json?key=99ad5d86dfef45649f3135458222607 &q=LA&days=10&aqi=no&alerts=no"""
-if __name__ == '__main__':
-    weather('London', datetime.date(2022, 7, 29), "99ad5d86dfef45649f3135458222607 ")
