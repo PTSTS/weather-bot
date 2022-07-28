@@ -19,9 +19,9 @@ class Weather:
 def weather(location: str, date, api_key):
     """
     Communicate with weather API
-    :param location str: location string, can be as long as the GET URL allows
-    :param date datetime: date for the weather
-    :param api_key str: weather API key
+    :param str location: location string, can be as long as the GET URL allows
+    :param datetime.date date: date for the weather
+    :param str api_key: weather API key
     :return: a Weather object
     """
     location = location.replace('&', '')
@@ -73,7 +73,7 @@ def extract_temp(data, date):
     """
     Extract high and low temperature from the response data
     :param dict data: Response data for a single day, must be under "forecastday"
-    :param datetime date: date to extract
+    :param datetime.date date: date to extract
     :return: if successful, (high, low) temp (always celsius)
     """
     forecast_date = data['forecast']['forecastday']
