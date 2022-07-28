@@ -18,6 +18,7 @@ python server/app.py
 This API key is used for www.weatherapi.com
 
 ###Essential Modules
+
 ```
 weather-bot
 |_config
