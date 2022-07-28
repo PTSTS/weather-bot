@@ -63,7 +63,6 @@ def weather(location: str, date, api_key):
                 response_body['location']['country'],
             ])
         except TypeError:
-            print(response_body)
             weather_data.location_found = True
             weather_data.date_available = False
 
