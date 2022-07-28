@@ -25,7 +25,7 @@ def weather(location: str, date, api_key):
     data = {
         'key': api_key,
         'q': location,
-        'days': int((date - current_date).days) + 1,
+        'days': 10,
         'aqi': 'no',
         'alerts': 'no',
     }
@@ -47,21 +47,26 @@ def weather(location: str, date, api_key):
                 weather_data.error_message = 'Weather API error.'
         else:
                 weather_data.error_message = 'Weather API error.'
-    elif len(response_body["forecast"]['forecastday']) < data['days']:
-        weather_data.location_found = True
-        weather_data.date_available = False
+    # elif len(response_body["forecast"]['forecastday']) < data['days']:
+    #     print(response_body)
+    #     weather_data.location_found = True
+    #     weather_data.date_available = False
     else:
-        high_temp, low_temp = extract_temp(response_body, date)
-        weather_data.location_found = True
-        weather_data.date_available = True
-        weather_data.high_temp = high_temp
-        weather_data.low_temp = low_temp
-        weather_data.location = ', '.join([
-            response_body['location']['name'],
-            response_body['location']['region'],
-            response_body['location']['country'],
-        ])
-        print(high_temp, low_temp)
+        try:
+            high_temp, low_temp = extract_temp(response_body, date)
+            weather_data.location_found = True
+            weather_data.date_available = True
+            weather_data.high_temp = high_temp
+            weather_data.low_temp = low_temp
+            weather_data.location = ', '.join([
+                response_body['location']['name'],
+                response_body['location']['region'],
+                response_body['location']['country'],
+            ])
+        except TypeError:
+            print(response_body)
+            weather_data.location_found = True
+            weather_data.date_available = False
 
     return weather_data
 
@@ -74,6 +79,7 @@ def extract_temp(data, date):
             high_temp = day['day']['maxtemp_c']
             low_temp = day['day']['mintemp_c']
             return high_temp, low_temp
+    return False
 
 
 """https://api.weatherapi.com/v1/forecast.json?key=99ad5d86dfef45649f3135458222607 &q=LA&days=10&aqi=no&alerts=no"""
